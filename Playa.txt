@@ -1,0 +1,297 @@
+package com.TheWoods.game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+
+
+public class Player extends Sprite
+{
+	SpriteBatch batch;
+	Texture alice;
+	Animation animation;
+    TextureRegion current_frame;
+    TextureRegion[][] frames;
+    float moveSpeed, delta, frameTime, playTime;
+    Vector2 position;
+    OrthographicCamera camera;
+    int positionX, positionY, step = 10000, score = 0;
+    Music death, win;
+
+    
+    final int Down = 0, Left = 1, Right = 2, Up = 3;
+    int direction = Down, prevDirection;
+ 
+    public Player()
+    {
+    	
+    	positionX = 332;
+        positionY = 1360;
+      
+    	batch = new SpriteBatch();
+		alice = new Texture(Gdx.files.internal("AliceSprite.png"));
+		
+        //SpriteSheet divided up into different frames
+        frames = TextureRegion.split(alice, alice.getWidth() / 3, alice.getHeight() / 4);
+        animation = new Animation(0.10f, frames[0]);
+
+        //Death Sound
+        death = Gdx.audio.newMusic(Gdx.files.internal("d.mp3"));
+        win = Gdx.audio.newMusic(Gdx.files.internal("G.mp3"));
+        
+        
+        
+        //Where the player will appear on the map
+        position = new Vector2(positionX,positionY);
+        moveSpeed = 65f;
+    }
+    public void render(SpriteBatch batch)
+    {
+    	batch.draw(current_frame, position.x, position.y);
+    	
+    }
+    public void update(float delta)
+    {
+    	prevDirection = direction;
+		delta = Gdx.graphics.getDeltaTime();
+		frameTime += delta;
+		newGame();
+		//isDeader();
+		isDead();
+		isHigh();
+		Shroom1();
+		Shroom2();
+		Shroom3();
+		Shroom4();
+		Shroom5();
+		Shroom6();
+		Gold();
+		
+		
+		
+		current_frame = animation.getKeyFrame(frameTime, true);
+		if(current_frame.isFlipY())
+			current_frame.flip(false, true);
+		//Player Movement and Animation	
+		if(Gdx.input.isKeyPressed(Keys.A))
+		{
+        	position.x -= moveSpeed * delta;
+			direction = Left;
+			step-=2;
+			System.out.println("Step:"+step);
+			System.out.println("Score:"+score);
+			//isDeader();
+			//System.out.println(boom);
+		}
+		else if (Gdx.input.isKeyPressed(Keys.D))
+		{
+			position.x += moveSpeed * delta;
+			direction = Right;
+			step-=2;
+			System.out.println("Step:"+step);
+			System.out.println("Score:"+score);
+			//isDeader();
+			//System.out.println(boom);
+		}
+		else if(Gdx.input.isKeyPressed(Keys.W))
+		{
+        	position.y += moveSpeed * delta;
+			direction = Up;
+			step-=2;
+			System.out.println("Step:"+step);
+			System.out.println("Score:"+score);
+			//isDeader();
+			//System.out.println(boom);
+		}
+		else if (Gdx.input.isKeyPressed(Keys.S))
+		{
+			position.y -= moveSpeed * delta;
+			direction = Down;
+			step-=2;
+			System.out.println("Step:"+ step);
+			System.out.println("Score:"+ score);
+			//isDeader();
+			//System.out.println(boom);
+		}
+		
+		if(direction != prevDirection)
+		{
+			animation = new Animation(0.10f, frames[direction]);
+			frameTime = 0.0f;
+		}
+		
+    }
+    public void Shroom7()
+    {
+    	if(position.x>=1000 && position.x<=1006)
+    	{
+    		if(position.y >= 905 && position.y<=910)
+    		{
+    			step+=20;
+    			score++;
+    		}
+    	}
+    }
+    public void Shroom6() {
+
+    	if(position.x>=1200 && position.x<=1206)
+    	{
+    		if(position.y >= 600 && position.y<=606)
+    		{
+    			step+=20;
+    			score++;
+    		}
+    	}
+		
+	}
+	public void Shroom5() {
+		
+    	if(position.x>=600 && position.x<=604)
+    	{
+    		if(position.y >= 800 && position.y<=804)
+    		{
+    			step+=20;
+    			score++;
+    		}
+    	}
+		
+	}
+	public void Shroom1()
+    {
+    	if(position.x>=400&&position.x<=408)
+    	{
+    		if(position.y >= 501 && position.y<=508)
+    		{
+    			step+=20;
+    			score++;
+    		}
+    	}
+    }
+    public void Shroom2()
+    {
+    	if(position.x>=800 && position.x<=806)
+    	{
+    		if(position.y >= 600 && position.y<=606)
+    		{
+    			step+=20;
+    			score++;
+    		}
+    	}
+    	
+    }
+    public void Shroom3()
+    {
+    	if(position.x>=1010 && position.x<=1015)
+    	{
+    		if(position.y >= 430 && position.y<=435)
+    		{
+    			step+=20;
+    			score++;
+    		}
+    	}
+    }
+    public void Shroom4()
+    {
+    
+    	    	if(position.x>=1000 && position.x<=1004)
+    	    	{
+    	    		if(position.y >= 600 && position.y<=604)
+    	    		{
+    	    			step+=20;
+    	    			score++;
+    	    		}
+    	    	}
+    	    	
+    	   
+    
+    }
+    public void Gold()
+    {
+    			if(score >= 30)
+    			{
+    				if(position.x>=849 && position.x<=854)
+        	    	{
+        	    		if(position.y >= 699 && position.y<=704)
+        	    		{
+        	    			step=900;
+        	    			win.play();
+        	    			position.x = 1000;
+        	    			position.y = 100;
+        	    		}
+        	    	}
+    			}
+    	
+    }
+   // public void isDeader()
+    {
+    	if(MathUtils.random(0,10000) == 1)
+    	{
+    		step = 0;
+    	}
+    }
+    
+    public void isDead()
+    {
+    	
+    	if(step <= 0)
+    	{
+    		position.x = 1165;
+    		position.x = 1165 + 1;
+    		position.x = 1165 - 1;
+    		position.y = 1364;
+    		position.y = 1364 + 1;
+    		position.y = 1364 - 1;
+    		death.play();
+    	
+    		
+    	}
+    }
+    public void newGame()
+    {
+    	if(Gdx.input.isKeyPressed(Keys.ENTER))
+		{
+			position.x = 400;
+			position.y = 400;
+			step = 600;
+			score = 0;
+			
+		}
+    	
+    }
+   
+    public void isHigh()
+    {
+    	
+    		if(step > 0 && step <= 600)
+    		{
+
+    	    	 
+    	        	if (position.y >=  930) {
+    	               position.y = 930 - 1;
+
+    	        	}
+
+    	        	if (position.y <= 340) {
+    	                position.y = 340 + 1;
+    	        	}
+
+    	        	if (position.x <= 350) {
+    	                position.x = 350 + 1;
+    	        	}
+
+    	        	if (position.x >= 1400) {
+    	                position.x = 1400 - 1;
+    	        	}
+    	        
+    		}
+    		
+    	}	
+   
+}

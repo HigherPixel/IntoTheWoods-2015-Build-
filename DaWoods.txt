@@ -1,0 +1,77 @@
+package com.TheWoods.game;
+
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
+
+
+
+public class Woods extends ApplicationAdapter {
+	SpriteBatch batch;
+	Music song;
+	TiledMap tiledMap;
+    OrthographicCamera camera;
+    TiledMapRenderer tiledMapRenderer;
+    float delta;
+    Player player;
+    int Xx, Yy;
+    Texture mushroom;
+    Vector2 set;
+
+    final int Down = 0, Left = 1, Right = 2, Up = 3;
+    int direction = Down, prevDirection;
+    
+	@Override
+	public void create () {
+
+		float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+        
+    
+
+        batch = new SpriteBatch();
+		//Camera Settings
+		camera = new OrthographicCamera();
+        camera.setToOrtho(false,w,h);
+        camera.update();
+        
+        //Map Loader
+        tiledMap = new TmxMapLoader().load("TheWoods.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        player = new Player();
+        //The music will keep looping until the game window is closed
+        song = Gdx.audio.newMusic(Gdx.files.internal("Level Up.mp3"));
+        song.setLooping(true);
+        song.play();
+        
+	}
+	@Override
+	public void render ()
+	{
+		Gdx.gl.glClearColor(0, 0, 0, 0);
+	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	    
+	    camera.position.x = player.position.x;
+        camera.position.y = player.position.y;
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+		player.update(delta);
+		//Rendering Map
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render();
+        //Drawing Player
+        batch.begin();
+        player.render(batch);
+        batch.end();
+	}
+	
+}
